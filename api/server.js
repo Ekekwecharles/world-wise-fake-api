@@ -47,7 +47,21 @@ export default function handler(req, res) {
   }
 
   if (req.method === "GET") {
-    return res.status(200).json(data);
+    const { id } = req.query; // This is for query parameters
+
+    // If no ID is provided, return all cities
+    if (!id) {
+      return res.status(200).json(data);
+    }
+
+    // If an ID is provided in the path, find the city with that ID
+    const city = data.find((city) => city.id === Number(id));
+
+    if (city) {
+      return res.status(200).json(city);
+    } else {
+      return res.status(404).json({ error: "City not found" });
+    }
   }
 
   if (req.method === "POST") {
